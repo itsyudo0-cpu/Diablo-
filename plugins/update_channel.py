@@ -31,6 +31,7 @@ def register(app):
     app.add_handler(CallbackQueryHandler(cancel_set_channel, pattern="^updatech:cancel$"))
     app.add_handler(CallbackQueryHandler(select_update_format_channel, pattern="^updatefmt:"))
     app.add_handler(CommandHandler("setupdateformat", start_set_update_format))
+    app.add_handler(CallbackQueryHandler(show_update_format_channels, pattern="^settings:setupdateformat$"))
 
 # ==================== START SET CHANNEL ====================
 async def start_set_channel(update, context):
@@ -84,6 +85,24 @@ async def cancel_set_channel(update, context):
     from plugins.settings import show_menu
     await show_menu(update, context)
     
+# ==================== SETTINGS BUTTON: SET UPDATE FORMAT ====================
+async def show_update_format_channels(update, context):
+    """Settings -> Set Update Format: pick a channel, then send its update template"""
+    query = update.callback_query
+    await query.answer()
+
+    if not is_admin(query.from_user.id):
+        return
+
+    clean_session(query.from_user.id)
+
+    await query.message.edit_text(
+        "📝 *Set Update Format*\n\n"
+        "Select the channel whose update-channel format you want to set:",
+        reply_markup=channel_keyboard(0, "updatefmt"),
+        parse_mode="Markdown"
+    )
+
 # ==================== SET UPDATE FORMAT ====================
 async def start_set_update_format(update, context):
     """Start channel-wise update channel template flow via /setupdateformat"""

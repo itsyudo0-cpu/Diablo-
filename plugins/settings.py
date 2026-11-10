@@ -49,6 +49,10 @@ async def show_menu(update, context):
             callback_data="settings:setformat"
         )],
         [InlineKeyboardButton(
+            "📝 sᴇᴛ ᴜᴘᴅᴀᴛᴇ ғᴏʀᴍᴀᴛ",
+            callback_data="settings:setupdateformat"
+        )],
+        [InlineKeyboardButton(
             "ᴠɪᴇᴡ ғᴏʀᴍᴀᴛs",
             callback_data="settings:viewformats"
         )],

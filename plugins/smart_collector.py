@@ -346,9 +346,8 @@ async def smart_collect_input(update, context):
                 text=(
                     "⚠️ *Channel not selected*\n\n"
                     "Link mode cannot auto-detect the channel.\n"
-                    "Please select the channel manually:"
+                    "Please send the episode file instead."
                 ),
-                reply_markup=channel_keyboard(0, "post"),
                 parse_mode="Markdown"
             )
             return
@@ -482,10 +481,9 @@ async def handle_file_upload(update, context):
                     f"⚠️ *Channel not detected*\n\n"
                     f"File: `{file_name}`\n"
                     f"{reason}\n\n"
-                    f"Rename the file so it contains the channel title, "
-                    f"or select the channel manually:"
+                    f"Rename the file so it contains the channel title "
+                    f"and upload again."
                 ),
-                reply_markup=channel_keyboard(0, "post"),
                 parse_mode="Markdown"
             )
             return
