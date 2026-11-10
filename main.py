@@ -61,6 +61,29 @@ def main():
     # PTB's run_polling() then fails with "There is no current event loop".
     asyncio.set_event_loop(asyncio.new_event_loop())
 
+    # Render web service needs an open port -> tiny health server in background
+    import threading
+    from http.server import BaseHTTPRequestHandler, HTTPServer
+
+    class _Health(BaseHTTPRequestHandler):
+        def do_GET(self):
+            self.send_response(200)
+            self.end_headers()
+            self.wfile.write(b"OK")
+        def do_HEAD(self):
+            self.send_response(200)
+            self.end_headers()
+        def log_message(self, *a):
+            pass
+
+    try:
+        port = int(os.environ.get("PORT", "10000"))
+        srv = HTTPServer(("0.0.0.0", port), _Health)
+        threading.Thread(target=srv.serve_forever, daemon=True).start()
+        logger.info(f"🌐 Health server on port {port}")
+    except Exception as e:
+        logger.warning(f"Health server failed: {e}")
+
     if not check_pid_lock():
         sys.exit(1)
     
@@ -244,4 +267,4 @@ if __name__ == "__main__":
         logger.error(f"❌ Fatal error: {e}")
         cleanup_pid()
         sys.exit(1)
-        
+    
