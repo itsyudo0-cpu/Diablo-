@@ -2,6 +2,7 @@
 
 import os
 import sys
+import asyncio
 import logging
 from telegram.ext import Application, MessageHandler, filters
 from config import BOT_TOKEN
@@ -56,6 +57,10 @@ def cleanup_pid():
 def main():
     """Initialize and run bot"""
     
+    # FIX: Python 3.14 no longer creates an event loop automatically,
+    # PTB's run_polling() then fails with "There is no current event loop".
+    asyncio.set_event_loop(asyncio.new_event_loop())
+
     if not check_pid_lock():
         sys.exit(1)
     
@@ -239,3 +244,4 @@ if __name__ == "__main__":
         logger.error(f"❌ Fatal error: {e}")
         cleanup_pid()
         sys.exit(1)
+        
