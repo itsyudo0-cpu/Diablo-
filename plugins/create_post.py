@@ -58,12 +58,11 @@ async def show_channel_list(update, context):
     try:
         await query.message.edit_text(
             "📺 *ᴄʀᴇᴀᴛᴇ ᴘᴏsᴛ*\n\n"
-            "📤 *Send the episode file(s) now* — the channel is "
-            "auto-detected from the file name (channel title).\n\n"
-            "Or select a channel manually:\n"
-            "✅ ʀᴇᴀᴅʏ ᴛᴏ ᴘᴏsᴛ\n"
-            "❌ ғᴏʀᴍᴀᴛ ɴᴏᴛ sᴇᴛ",
-            reply_markup=channel_keyboard(0, "post"),
+            "📤 *Send the episode file(s) now*\n\n"
+            "The channel is auto-detected from the file name (channel title).",
+            reply_markup=InlineKeyboardMarkup([[
+                InlineKeyboardButton("🔙 Back", callback_data="menu:back")
+            ]]),
             parse_mode="Markdown"
         )
     except Exception as e:
